@@ -13,7 +13,7 @@
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <UseStandardResourceNames>true</UseStandardResourceNames>
     <TargetFSharpCoreVersion>4.4.3.0</TargetFSharpCoreVersion>
-    <Name>SudoSolver.Test</Name>
+    <Name>SudokuSolver.Test</Name>
     <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -77,9 +77,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\SudoSolver.Core\SudoSolver.Core.fsproj">
-      <Name>SudoSolver.Core</Name>
-      <Project>{e9f9d0d0-4980-4f7f-833a-016baaaf9d7d}</Project>
+    <ProjectReference Include="..\SudokuSolver.Core\SudokuSolver.Core.fsproj">
+      <Name>SudokuSolver.Core</Name>
+      <Project>{33c195b9-e1da-4ee2-a131-472b8d34e671}</Project>
       <Private>True</Private>
     </ProjectReference>
   </ItemGroup>

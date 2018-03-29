@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27428.1
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "SudoSolver.Core", "SudoSolver.Core\SudoSolver.Core.fsproj", "{E9F9D0D0-4980-4F7F-833A-016BAAAF9D7D}"
+Project("{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}") = "SudokuSolver.Core", "SudokuSolver.Core\SudokuSolver.Core.fsproj", "{33C195B9-E1DA-4EE2-A131-472B8D34E671}"
 EndProject
-Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "SudoSolver.Test", "SudoSolver.Test\SudoSolver.Test.fsproj", "{0A377A60-B8AC-454F-BE7A-24F4A9D1DC48}"
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "SudokuSolver.Test", "SudokuSolver.Test\SudokuSolver.Test.fsproj", "{0A377A60-B8AC-454F-BE7A-24F4A9D1DC48}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -13,10 +13,10 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{E9F9D0D0-4980-4F7F-833A-016BAAAF9D7D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{E9F9D0D0-4980-4F7F-833A-016BAAAF9D7D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{E9F9D0D0-4980-4F7F-833A-016BAAAF9D7D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{E9F9D0D0-4980-4F7F-833A-016BAAAF9D7D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{33C195B9-E1DA-4EE2-A131-472B8D34E671}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{33C195B9-E1DA-4EE2-A131-472B8D34E671}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{33C195B9-E1DA-4EE2-A131-472B8D34E671}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{33C195B9-E1DA-4EE2-A131-472B8D34E671}.Release|Any CPU.Build.0 = Release|Any CPU
 		{0A377A60-B8AC-454F-BE7A-24F4A9D1DC48}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{0A377A60-B8AC-454F-BE7A-24F4A9D1DC48}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0A377A60-B8AC-454F-BE7A-24F4A9D1DC48}.Release|Any CPU.ActiveCfg = Release|Any CPU
