@@ -1,0 +1,2 @@
+﻿module SudoSolver.Core.StandardBoard
+

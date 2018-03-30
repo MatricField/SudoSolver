@@ -8,6 +8,9 @@ EndProject
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "SudokuSolver.Test", "SudokuSolver.Test\SudokuSolver.Test.fsproj", "{0A377A60-B8AC-454F-BE7A-24F4A9D1DC48}"
 EndProject
 Global
+	GlobalSection(Performance) = preSolution
+		HasPerformanceSessions = true
+	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
