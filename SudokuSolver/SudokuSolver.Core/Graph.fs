@@ -1,5 +1,7 @@
 ﻿namespace SudoSolver.Core
 
+open System.Runtime.InteropServices
+
 [<Struct>]
 type Cell<'T when 'T : comparison> =
     |Written of Element: 'T

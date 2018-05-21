@@ -18,6 +18,7 @@ let solve graph =
             availableIndeces
             |>List.sortBy (getCell >> countAvailableElements)
         match indexcesOfInterest with
+        // Recursive base case: All cells filled -> successed
         |[] -> [cellMap]
         |index::tail ->
             match getCell index with
@@ -44,6 +45,7 @@ let solve graph =
                     match solve cellMap' tail with
                     |[] -> None
                     |arr -> Some arr
+                // Recursive base case: possibleElements is empty -> failed
                 possibleElements
                 |>Array.ofSeq
                 |>Array.Parallel.choose iterElement
