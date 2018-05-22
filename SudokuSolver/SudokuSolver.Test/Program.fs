@@ -19,7 +19,6 @@ let graph5x5 =
         Graph.Height = 5
         Graph.PossibleElements = [1;2;3;4;5] |> Set.ofList
         Graph.GroupMap = glyphsGroup5x5
-        Graph.Cells = Map.empty
     }
     |>Graph.groupRows
     |>Graph.groupColumns
@@ -34,17 +33,17 @@ let main argv =
             (0, 2), 3;
             (0, 0), 4
         ]
-        |>List.map (fun (x, y) -> (x, Written y))
         |>Map.ofList
 
-    let graph = {graph5x5 with Cells = cells}
-    let solution = Solver.solve graph
+    let graph = graph5x5
+    let solution = Solver.solve graph cells 
     let rec printSoluction = function
         |graph'::tail ->
-            Array2D.init 5 5 (fun x y -> graph'.Cells |> Map.find (x,y))
-            |>Array2D.map (function |Written x -> x |_ -> invalidOp "Not solved")
+            Array2D.init 5 5 (fun x y -> graph' |> Map.find (x,y))
             |>printfn "%A"
             printSoluction tail
         |[] -> printfn "End of results"
-    printSoluction solution
+    solution
+    |>Array.toList
+    |>printSoluction
     0 // return an integer exit code

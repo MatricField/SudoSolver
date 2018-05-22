@@ -1,80 +1,107 @@
-module SudoSolver.Core.Solver
+namespace SudoSolver.Core
 
-let solve graph =
-    let 
-        {
-            Width = width;
-            Height = height;
-            PossibleElements = possibleElements;
-            GroupMap = groupMap
-            Cells = cells
-        } = graph
-    let countAvailableElements (Empty elms) =
-        elms |> Set.count
+type Graph<'T when 'T : comparison> ={
+    Width: int
+    Height: int
+    PossibleElements: Set<'T>
+    GroupMap: Map<(int*int), Set<(int*int)>>
+}
 
-    let rec solve cellMap availableIndeces =
-        let getCell idx = cellMap |> Map.find idx
-        let indexcesOfInterest =
-            availableIndeces
-            |>List.sortBy (getCell >> countAvailableElements)
-        match indexcesOfInterest with
-        // Recursive base case: All cells filled -> successed
-        |[] -> [cellMap]
-        |index::tail ->
-            match getCell index with
-            |Empty possibleElements ->
-                let iterElement element =
-                    let removeElementFromDependentCells cellMap dependentCellIndex =
-                        let dependentCell =
-                            cellMap |> Map.find dependentCellIndex
-                        match dependentCell with
-                        |Empty possibleElements ->
-                            let dependentCell' =
-                                possibleElements
-                                |>Set.remove element
-                                |>Empty
-                            cellMap
-                            |>Map.add dependentCellIndex dependentCell'
-                        |_ -> cellMap
-                    let cellMap' =
-                        groupMap
-                        |>Map.find index
-                        |>Set.fold removeElementFromDependentCells cellMap
-                        |>Map.add index (Written element)
-                                
-                    match solve cellMap' tail with
-                    |[] -> None
-                    |arr -> Some arr
-                // Recursive base case: possibleElements is empty -> failed
-                possibleElements
-                |>Array.ofSeq
-                |>Array.Parallel.choose iterElement
-                |>Seq.collect id
-                |>List.ofSeq
-            |_ -> invalidOp "logical error"
+module Graph =
+    let addToGroupMap groupMap newGroup =
+        let newGroupSet =
+            newGroup
+            |>Set.ofSeq
+        let addGroupToGroupMap groupMap idx =
+            let newGroupMembers = 
+                newGroupSet |> Set.remove idx
+            let oldGroupMembers =
+                groupMap
+                |>Map.tryFind idx
+                |>Option.defaultValue Set.empty
+            groupMap
+            |>Map.add idx (oldGroupMembers + newGroupMembers)
+        newGroup
+        |>Seq.fold addGroupToGroupMap groupMap
 
-    let indeces =
-        Seq.init width (fun x -> Seq.init height (fun y -> (x,y)))
-        |>Seq.collect id
-        |>Set.ofSeq
+    let inline groupMapAdd newGroup groupMap = addToGroupMap groupMap newGroup
 
-    let givenCellIndeces =
-        cells
-        |>Map.toSeq |>Seq.map fst |>Set.ofSeq
+    let groupColumns graph =
+        let {Width = width; Height = height; GroupMap = groupMap} = graph
+        let groupMap' =
+            Seq.init width ((fun y -> Seq.init height (fun x -> (x, y))) >> Set.ofSeq)
+            |>Seq.fold addToGroupMap groupMap
+        {graph with GroupMap = groupMap'}
 
-    let addIndexToMap map index =
-        if givenCellIndeces |> Set.contains index then
-            map
-        else
-            let unavailableElements =
-                Set.intersect givenCellIndeces (groupMap |> Map.tryFind index |> Option.defaultValue Set.empty)
-                |>Seq.choose (cells.TryFind >> Option.bind (function |Written elm -> Some elm |_ -> None))
-                |>Set.ofSeq
-            map
-            |>Map.add index (Empty (possibleElements - unavailableElements))
-    let cellMap =
-        indeces
-        |>Seq.fold addIndexToMap cells
-    match solve cellMap (indeces - givenCellIndeces |> Set.toList)  with
-    |[] -> []
-    |cellMaps -> cellMaps |> List.map (fun cellMap' -> {graph with Cells = cellMap'})
+    let groupRows graph =
+        let {Width = width; Height = height; GroupMap = groupMap} = graph
+        let groupMap' =
+            Seq.init height ((fun x -> Seq.init width (fun y -> (x, y))) >> Set.ofSeq)
+            |>Seq.fold addToGroupMap groupMap
+        {graph with GroupMap = groupMap'}
+
+    let group newGroup graph =
+        let {GroupMap = groupMap} = graph
+        let groupMap' =
+            groupMap
+            |>groupMapAdd newGroup
+        {graph with GroupMap = groupMap'}
+
+module Solver =
+    let solve graph filledMap =
+        let { GroupMap = groupMap } = graph
+
+        let rec solve filledMap unusedMap =
+            if unusedMap |> Map.isEmpty then
+                Some [|filledMap|]
+            else
+                let (indexOfInterest, availableElements) =
+                    unusedMap
+                    |>Map.toSeq
+                    |>Seq.minBy (snd >> Set.count)
+                if availableElements |> Seq.isEmpty then
+                    None
+                else
+                    let dependentCellIndeces = groupMap |> Map.find indexOfInterest
+                    let fixElement element =
+                        let removeFixedElement map idx =
+                            match map |> Map.tryFind idx with
+                            |None -> map
+                            |Some availableElements ->
+                                let availableElements' =
+                                    availableElements
+                                    |> Set.remove element
+                                map |> Map.add idx availableElements'
+                        let unusedMap' =
+                            dependentCellIndeces 
+                            |>Set.fold removeFixedElement unusedMap
+                            |>Map.remove indexOfInterest
+                        let filledMap' =
+                            filledMap |> Map.add indexOfInterest element
+                        (filledMap', unusedMap')
+                    availableElements
+                    |>Set.toArray
+                    |>Array.Parallel.choose (fun elm -> fixElement elm ||> solve)
+                    |>Array.collect id
+                    |>Some
+
+        let unusedMap =
+            let
+                {
+                    Height = height
+                    Width = width
+                    PossibleElements = possibleElements
+                } = graph
+            [0..width-1]
+            |>List.fold (fun map x ->
+                [0..height-1] 
+                |>List.fold (fun map y ->
+                    if filledMap |> Map.containsKey (x,y) then
+                        map
+                    else
+                        map |> Map.add (x,y) possibleElements
+                    ) map
+                ) Map.empty
+        match solve filledMap unusedMap with
+        |Some result -> result
+        |None -> [||]

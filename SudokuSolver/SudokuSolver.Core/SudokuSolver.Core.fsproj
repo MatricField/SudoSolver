@@ -5,7 +5,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Include="Graph.fs" />
     <Compile Include="Solver.fs" />
     <Compile Include="StandardBoards.fs" />
   </ItemGroup>
