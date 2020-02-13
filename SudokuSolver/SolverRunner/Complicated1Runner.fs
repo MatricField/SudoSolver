@@ -1,7 +1,5 @@
-﻿// Learn more about F# at http://fsharp.org
-// See the 'F# Tutorial' project for more help.
-
-open SudoSolver.Core
+﻿module Complicated1Runner
+open SudoSolver.Complicated
 
 let swap (x,y) = (y,x)
 
@@ -23,7 +21,6 @@ let graph5x5 =
     |>Graph.groupRows
     |>Graph.groupColumns
 
-[<EntryPoint>]
 let main argv = 
 
     let cells =
@@ -36,7 +33,7 @@ let main argv =
         |>Map.ofList
 
     let graph = graph5x5
-    let solution = Solver.solve graph cells 
+    let solution = Solver1.solve graph cells 
     let rec printSoluction = function
         |graph'::tail ->
             Array2D.init 5 5 (fun x y -> graph' |> Map.find (x,y))

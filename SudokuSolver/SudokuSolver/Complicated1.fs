@@ -1,4 +1,4 @@
-namespace SudoSolver.Core
+namespace SudoSolver.Complicated
 
 type Graph<'T when 'T : comparison> ={
     Width: int
@@ -47,7 +47,7 @@ module Graph =
             |>groupMapAdd newGroup
         {graph with GroupMap = groupMap'}
 
-module Solver =
+module Solver1 =
     let solve graph filledMap =
         let { GroupMap = groupMap } = graph
 

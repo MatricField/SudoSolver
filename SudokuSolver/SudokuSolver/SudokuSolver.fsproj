@@ -5,8 +5,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Include="Solver.fs" />
-    <Compile Include="StandardBoards.fs" />
+    <Compile Include="Complicated1.fs" />
+    <Compile Include="Trivial1.fs" />
   </ItemGroup>
 
 </Project>
